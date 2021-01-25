@@ -32,13 +32,13 @@ public class BookRestControllerE2ETest {
 
         //When
         when().
-            get("/api/books/").
+            get("/api/books/")
 
         //Then
-        then().
-            statusCode(200).
-            body("[0].title", equalTo("SUEÑOS DE ACERO Y NEON")).
-            body("[1].title", equalTo("LA VIDA SECRETA DE LA MENTE"));
+        .then()
+            .statusCode(200)
+            .body("[0].title", equalTo("SUEÑOS DE ACERO Y NEON"))
+            .body("[1].title", equalTo("LA VIDA SECRETA DE LA MENTE"));
 
     }
 
@@ -46,41 +46,43 @@ public class BookRestControllerE2ETest {
     public void addBookTest() {
 
         //Given
-        Response response = given().
-            auth().
-            basic("user", "pass").
-            contentType("application/json").
-            body("{\"title\":\"book1\",\"description\":\"description1\" }").
-            when().
-            post("/api/books/").andReturn();
+        Response response = given()
+            .auth()
+            .basic("user", "pass")
+            .contentType("application/json")
+            .body("{\"title\":\"book1\",\"description\":\"description1\" }")
+            .when()
+            .post("/api/books/").andReturn();
 
         int id = from(response.getBody().asString()).get("id");
 
         when()
-                .get("/api/books/{id}",id).
-                then()
-                .statusCode(200);
+            .get("/api/books/{id}",id)
+            .then()
+            .statusCode(200)
+            .body("title", equalTo("book1"))
+            .body("description", equalTo("description1"));
     }
 
     @Test
     public void removeBookTest() {
 
         //Given
-        given().
-            auth().
-            basic("admin", "pass").
+        given()
+            .auth()
+            .basic("admin", "pass")
         //When
-        when().
-            delete("/api/books/3").
+        .when()
+            .delete("/api/books/3")
 
         //Then
-            then().
-            statusCode(200);
+            .then()
+            .statusCode(200);
 
-        given().
-        when()
-            .get("/api/books/3").
-            then()
+        given()
+            .when()
+            .get("/api/books/3")
+            .then()
             .statusCode(404);
     }
 }
