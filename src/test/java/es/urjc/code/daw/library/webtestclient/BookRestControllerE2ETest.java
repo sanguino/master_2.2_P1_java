@@ -87,7 +87,10 @@ public class BookRestControllerE2ETest {
                 .uri("/api/books/" + id)
                 .exchange()
                 .expectStatus()
-                .isOk();
+                .isOk()
+                .expectBody()
+                .jsonPath("$.title").isEqualTo("book1")
+                .jsonPath("$.description").isEqualTo("description1");
     }
 
     @Test
